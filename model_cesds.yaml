@@ -5,13 +5,13 @@ symbols:
     states: [Z, N]
     controls: [C, Welf]
     exogenous: [e_Z]
-    parameters: [beta, delta, gamma, theta, po, xi, rhoZ]
+    parameters: [beta, delta, gamma, theta, po, rhoZ]
 
 
 definitions:
     mu: theta / (theta-1)
-    rho: N^(xi)
-    epsilon: xi
+    rho: N^(1 / (theta-1))
+    epsilon: mu - 1
     
 equations:
 
@@ -23,7 +23,7 @@ equations:
 
 
     arbitrage:
-        - -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu(1)-1) ) ) * (po + (1-po)*mu/mu(1))
+        - -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu(1)-1) ) ) 
         - -Welf + log(C) + beta*Welf(+1)
 
 
@@ -33,8 +33,8 @@ calibration:
         Z: 1
         
         mu: theta / (theta-1)
-        rho: N^(xi)
-        epsilon: xi
+        rho: N^(1 / (theta-1))
+        epsilon: mu - 1
         
         N: Z*(1-delta)/((1/beta - 1 + delta)/( po*epsilon + (1-po)*(mu-1) ) +delta)
         C: rho*(Z - delta*N/(1-delta))
@@ -46,7 +46,6 @@ calibration:
         gamma: 1
         theta: 3.8
         rhoZ: 0.95
-
        
 
 exogenous: !Normal
