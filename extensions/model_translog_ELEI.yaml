@@ -1,0 +1,79 @@
+name: Competitive Equilibrium
+
+symbols:
+
+    states: [Z, N, K]
+    controls: [C, Welf, LC]
+    exogenous: [e_Z]
+    parameters: [theta, xi, beta, delta, po, rhoZ, Z_ss, psi, mu, deltaK, zeta]
+
+
+definitions:
+    #mu: theta / (theta-1)
+    rho: N^(mu - 1)
+    epsilon: mu - 1
+    Y: Z*(N^(mu-1) )*(LC^zeta)*K^(1-zeta)
+    I: Y - C
+    D: zeta*Y/(LC*Z)
+    L: ( (po + (1-po)*(1/mu))*zeta*Y*(C^(-1))/LC ) ^ (1/psi)
+    
+equations:
+
+    transition:
+
+        - Z = exp( rhoZ * log(Z(-1)) + e_Z )
+        - N = (1-delta) * ( N(-1) + Z(-1)*(L(-1)-LC(-1)) )
+        - K = (1-deltaK)*K(-1) + I(-1)
+
+
+    arbitrage:
+        - -C^(-1) * D + beta * (1-delta)  * (C(1)^(-1)) * ( D(1) + (mu-1)*Y(1)/N(1) )
+        - -Welf + log(C) + beta*Welf(+1)
+        - -C^(-1) + beta*(C(1)^(-1))*( (po + (1-po)*(1/mu))*(1-zeta)*Y(1)/K(1) +1 - deltaK)
+
+
+calibration:
+
+        # steady_state:
+        
+        N: L*(1-delta) / ( delta + (zeta/(mu-1))*((1/beta) - 1 + delta) )
+        LC: N*(zeta/(mu-1))*( (1/(beta*(1-delta))) - 1 )
+        K: (N^((mu-1)/zeta))*LC / ( (po + (1-po)*mu)* (1/beta -1 +deltaK)/(1-zeta))^(1/zeta) 
+        Y: Z*(N^(mu-1) )*(LC^zeta)*K^(1-zeta)
+        I: deltaK*K
+        C: Y-I
+        D: zeta*Y/(LC*Z)
+        Z: 1
+        L: 1 # ( (po + (1-po)*(1/mu))*Z*rho*C^(-1) ) ^ (1/psi)
+
+        Welf: log(C)*(1/(1-beta))
+
+        mu: theta/(theta-1)
+        rho: N^(mu - 1)
+        epsilon: mu - 1
+        po: 1
+
+        # parameters:
+
+        #K: (1/beta/(1-delta)-1) * (1/xi)
+        xi: 1/(theta-1)
+        theta: 3.8 # 1+1/xi
+        beta: 0.99
+        delta: 0.025
+        deltaK: 0.025
+        rhoZ: 0.95
+        Z_ss: 1
+        psi: 0.25
+        zeta: 0.66
+
+
+exogenous: !Normal
+    Sigma: [[0.0072^2]]
+
+domain:
+    Z: [Z*0.95, Z*1.05]
+    N: [N*0.8, N*1.2]
+
+options:
+    grid: !CartesianGrid
+        orders: [10, 10]
