@@ -13,7 +13,7 @@ definitions:
     #mu: theta / (theta-1)
     rho: N^(mu - 1)
     epsilon: mu - 1
-    Y: Z*(N^(mu-1) )*(LC^zeta)*K^(1-zeta)
+    Y: Z*(rho)*(LC^zeta)*K^(1-zeta)
     I: Y - C
     D: zeta*Y/(LC*Z) #to simplify, Euler looks like general case
     
@@ -27,7 +27,7 @@ equations:
 
 
     arbitrage:
-        - -C^(-gamma) * D + beta * (1-delta)  * (C(1)^(-gamma)) * ( D(1) + (mu-1)*Y(1)/N(1) )
+        - -C^(-gamma) * D + beta * (1-delta)  * (C(+1)^(-gamma)) * ( D(1) + Y(1)/N(1)*( (epsilon)*po + (1-po) * (mu-1) ) ) * (po + (1-po)*mu/mu)
         - -Welf + log(C) + beta*Welf(+1)
         - -C^(-gamma) + beta*(C(1)^(-gamma))*( (po + (1-po)*(1/mu))*(1-zeta)*Y(1)/K(1) +1 - deltaK)
 
@@ -39,12 +39,13 @@ calibration:
         N: L*(1-delta) / ( delta + (zeta/(mu-1))*((1/beta) - 1 + delta) )
         LC: N*(zeta/(mu-1))*( (1/(beta*(1-delta))) - 1 )
         K: (N^((mu-1)/zeta))*LC / ( (po + (1-po)*mu)* (1/beta -1 +deltaK)/(1-zeta))^(1/zeta) 
-        Y: Z*(N^(mu-1) )*(LC^zeta)*K^(1-zeta)
+        Y: Z*(rho)*(LC^zeta)*K^(1-zeta)
         I: deltaK*K
         C: Y-I
         D: zeta*Y/(LC*Z)
         Z: 1
-        L: 1 
+        L: 1 #( (po + (1-po)*2) zeta*sigma*(r+delta)/(1-delta) )*N^2 + delta*N/(1-delta)
+
 
         Welf: log(C)*(1/(1-beta))
 
@@ -72,7 +73,8 @@ exogenous: !Normal
 domain:
     Z: [Z*0.95, Z*1.05]
     N: [N*0.8, N*1.2]
+    K: [K*0.8, K*1.2]
 
 options:
     grid: !CartesianGrid
-        orders: [10, 10]
+        orders: [10, 10, 10]
