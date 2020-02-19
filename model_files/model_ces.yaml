@@ -1,0 +1,62 @@
+name: Competitive Equilibrium
+
+symbols:
+
+    states: [Z, N]
+    controls: [C, Welf]
+    exogenous: [e_Z]
+    parameters: [beta, delta, gamma, theta, po, xi, rhoZ]
+
+
+definitions:
+    mu: theta / (theta-1)
+    rho: N^(xi)
+    epsilon: xi
+    
+equations:
+
+    transition:
+
+        - Z = exp( rhoZ * log(Z(-1)) + e_Z )
+        - N = (1-delta) * ( N(-1) + Z(-1) - C(-1) / rho(-1) )
+
+
+
+    arbitrage:
+        - -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu(1)-1) ) ) * (po + (1-po)*mu/mu(1))
+        - -Welf + log(C) + beta*Welf(+1)
+
+
+calibration:
+
+        # steady_state:
+        Z: 1
+        
+        mu: theta / (theta-1)
+        rho: N^(xi)
+        epsilon: xi
+        
+        N: Z*(1-delta)/((1/beta - 1 + delta)/( po*epsilon + (1-po)*(mu-1) ) +delta)
+        C: rho*(Z - delta*N/(1-delta))
+        Welf: log(C)*(1/(1-beta))
+        
+        # parameters:
+        beta: 0.99
+        delta: 0.025
+        gamma: 1
+        theta: 3.8
+        rhoZ: 0.95
+        xi: 0.5
+        po: 0
+       
+
+exogenous: !Normal
+    Sigma: [[0.0072^2]]
+
+domain:
+    Z: [Z*0.95, Z*1.05]
+    N: [N*0.8, N*1.2]
+
+options:
+    grid: !CartesianGrid
+        orders: [10, 10]
