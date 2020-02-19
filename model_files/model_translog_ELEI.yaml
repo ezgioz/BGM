@@ -1,0 +1,90 @@
+name: Competitive Equilibrium
+
+symbols:
+
+    states: [Z, N, K]
+    controls: [C, Welf, LC]
+    exogenous: [e_Z]
+    parameters: [beta, delta, gamma, theta, po, rhoZ, varphi, deltaK, zeta, sigma, r]
+
+
+
+definitions:
+    mu: 1 + 1/sigma/N
+    rho: exp( - 1/sigma/N/2 )
+    epsilon: (mu-1)/2
+    Y: Z*(rho)*(LC^zeta)*K^(1-zeta)
+    I: Y - C
+    D: zeta*Y/(LC*Z) #to simplify, Euler looks like general case
+    L: ( (po + (1-po)*(1/mu))*Z*rho*C^(-gamma) ) ^ (1/varphi)
+
+equations:
+
+    transition:
+
+        - Z = exp( rhoZ * log(Z(-1)) + e_Z )
+        - N = (1-delta) * ( N(-1) + Z(-1)*(L(-1)-LC(-1)) )
+        - K = (1-deltaK)*K(-1) + I(-1)
+
+
+    arbitrage:
+        - -C^(-gamma) * D + beta * (1-delta)  * (C(+1)^(-gamma)) * ( D(1) + Y(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu(1)-1) ) ) * (po + (1-po)*mu/mu(1))
+        - -Welf + log(C) - (L^(1+varphi))/(1+varphi) + beta*Welf(+1)
+        - -C^(-gamma) + beta*(C(1)^(-gamma))*( (po + (1-po)*(1/mu(1)))*(1-zeta)*Y(1)/K(1) +1 - deltaK)
+
+
+calibration:
+
+        # steady_state:
+        
+
+        
+        N: 1 #( ( (r+deltaK)/(2*sigma*(r+zeta*deltaK)) )^2 + (r+deltaK)*(1-delta)/(sigma*(r+zeta*deltaK)*(r+delta)) ) ^ (1/2) - (r+deltaK)/(2*sigma*(r+zeta*deltaK))
+        L: 2*zeta*sigma*(r+delta)*(N^2)/(1-delta) + delta*N/(1-delta) 
+        LC: 2*zeta*sigma*(r+delta)*(N^2)/(1-delta)
+        K: LC* (rho*(1-zeta)/(r+deltaK) )^(1/zeta)
+        C: (r + zeta*deltaK)*K / (1-zeta)
+        Y: Z*rho *(LC^zeta)*K^(1-zeta)
+        I: Y - C
+        D: zeta*Y/(LC*Z)
+        Z: 1
+
+        
+        Welf: (log(C) - (L^(1+varphi))/(1+varphi))*(1/(1-beta))
+        
+        mu: 1 + 1/sigma/N
+        rho: exp( - 1/sigma/N/2 )
+        epsilon: (mu-1)/2
+        
+        
+        
+        
+
+
+        # parameters:
+
+        #K: (1/beta/(1-delta)-1) * (1/xi)
+        beta: 0.99
+        delta: 0.025
+        deltaK: 0.025
+        gamma: 1
+        theta: 3.8
+        rhoZ: 0.95
+        varphi: 0.25
+        #mu: theta / (theta-1)
+        zeta: 0.66
+        sigma: 0.35
+        r: 0.01
+        po: 0
+
+exogenous: !Normal
+    Sigma: [[0.0072^2]]
+
+domain:
+    Z: [Z*0.95, Z*1.05]
+    N: [N*0.8, N*1.2]
+    K: [K*0.8, K*1.2]
+
+options:
+    grid: !CartesianGrid
+        orders: [10, 10, 10]
