@@ -70,12 +70,12 @@ calibration:
         gamma: 1
         theta: 3.8
         rhoZ: 0.95
-        varphi: 0.25
+        #varphi: 0.25
         #mu: theta / (theta-1)
         zeta: 0.66
         sigma: 0.35
         r: 0.01
-        po: 0
+        #po: 0
 
 exogenous: !Normal
     Sigma: [[0.0072^2]]
