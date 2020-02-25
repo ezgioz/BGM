@@ -58,6 +58,9 @@ def compute_case(expm):
     # Create necesarry objects to store results
     values_ce = []
     values_po = []
+
+    nvals_ce = []
+    nvals_po = []
     
     # create parameter range
     parm_vec = linspace(*range)
@@ -65,7 +68,6 @@ def compute_case(expm):
     # solve all calibrations (For the range of calibrations)
     
     for i in parm_vec:
-        
         # Set calibrated parater value
         pp = {freeparam:i}
         model.set_calibration(**pp)
@@ -79,19 +81,22 @@ def compute_case(expm):
         
         if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
             #print('model', case, 'ME', freeparam, '=', i, '--> steady state cant be found: non-zero residuals')  
-            calib_ce = calib_pre_ce
-            res = residuals(model,calib=calib_ce)
-            if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
-                print('model', case, 'ME', freeparam, '=', i, '--> cant be solved even with previous value calib')  
-                dr_me_true = 0 
-            else: 
-                dr_me_true = 1         
-                dr_ce = perturb(model, order=2, steady_state=calib_ce);
-                
+            dr_me_true = 0
+            
+            #calib_ce = calib_pre_ce
+            #res = residuals(model,calib=calib_ce)
+            #if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
+            #    dr_me_true = 0   
+            #else: 
+            #    dr_po_true = 1
+            #    dr_ce = perturb(model, order=2, steady_state=calib_ce);
+            #    N_ce = model.calibration['N']
+
         else:    
             #print('model', case, 'ME', freeparam, '=', i, '--> steady state found')  
             dr_me_true = 1         
             dr_ce = perturb(model, order=2, steady_state=calib_ce);
+            N_ce = model.calibration['N']
 
         # Solve for the social planner equilibrium
         model.set_calibration(po=1);
@@ -99,28 +104,28 @@ def compute_case(expm):
         res = residuals(model,calib=calib_po)
         
         if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
-            #print('model', case, 'PO', freeparam, '=', i, '--> steady state cant be found: non-zero residuals')
-            calib_po = calib_pre_po
-            res = residuals(model,calib=calib_po)
-            if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
-                print('model', case, 'PO', freeparam, '=', i, '--> cant be solved even with previous value calib')  
-                dr_po_true = 0 
-            else: 
-                dr_po_true = 1         
-                dr_po = perturb(model, order=2, steady_state=calib_po);
+            dr_po_true = 0
+            
+            #print('model', case, 'ME', freeparam, '=', i, '--> steady state cant be found: non-zero residuals')  
+            #calib_po = calib_pre_po
+            #res = residuals(model,calib=calib_po)
+            #if abs(sum(res['arbitrage'])) + abs(sum(res['transition'])) > 0.00001:
+            #    dr_po_true = 0   
+            #else:  
+            #    dr_po_true = 1
+            #    dr_po = perturb(model, order=2, steady_state=calib_po);
+            #    N_po = model.calibration['N']
 
         else:
             #print('model', case, 'PO', freeparam, '=', i, '--> steady state found')  
             dr_po_true = 1
             dr_po = perturb(model, order=2, steady_state=calib_po);   
-            
-        print('model_ME_ss', calib_ce, 'model_PO_ss', calib_po)   
+            N_po = model.calibration['N']
                     
         if dr_me_true == 1 and dr_po_true == 1:
-            if i < 0.35:
-                print('model', freeparam, '=', i, '--> steady state found for both models')
+            print('model', freeparam, '=', i, '--> steady state found for both models')
             # Initial point at which to evaluate the welfare
-            eval_point = calib['states'].copy();
+            eval_point = calib_po['states'].copy();
             # Change initial value of N
             eval_point[1]*=0.5 # to 50 % of its of its steady-state value
             #eval_point[1]= 1    # to 1
@@ -128,26 +133,29 @@ def compute_case(expm):
             # Evalueate welfare
             w_ce = dr_ce(eval_point)[1]
             w_po = dr_po(eval_point)[1]
-            
+                
             # Convert to consumption equivalent
             v_ce = exp((1-beta)*w_ce)
             v_po = exp((1-beta)*w_po)
             
+            
         else:
             v_ce = float('NaN')
             v_po = float('NaN')
-        
-        
-        calib_pre_ce = calib_ce
-        calib_pre_po = calib_po
-        
+            
+            N_ce = float('NaN')
+            N_po = float('NaN')
+            
         # Add to list of values
         values_ce.append(v_ce)
         values_po.append(v_po)
         
+        nvals_ce.append(N_ce)
+        nvals_po.append(N_po)
+    
     #Construct dataframe
-    columns = [h.format(case) for h in ['{}', '{}_po', '{}_ce']]
-    df = pandas.DataFrame( column_stack([parm_vec, values_po, values_ce]), columns=columns)
+    columns = [h.format(case) for h in ['{}', '{}_po', '{}_ce', '{}_N_po', '{}_N_ce']]
+    df = pandas.DataFrame( column_stack([parm_vec, values_po, values_ce, nvals_po, nvals_ce]), columns=columns)
     
     #compute gains
     df['{}_gain'.format(case)] = (df['{}_po'.format(case)]/df['{}_ce'.format(case)]-1)*100    
