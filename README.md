@@ -7,7 +7,7 @@ This code is created by Pablo Winant and further developped by Ezgi Ozsogut.
 
 The code is maintained here https://github.com/ezgioz/BGM
 
-Installation
+Option 1: Installation
 ------------
 
 Required programs to produce the graphs are
@@ -15,9 +15,15 @@ Required programs to produce the graphs are
 - the [dolo](https://github.com/EconForge/dolo) modeling package
 - and the https://github.com/ezgioz/BGM is thre repository to be imported
 
-- Or run the code on Mybinder (link here) remote computer which has all the necesaary installations the the project folder `(No installation is needed)`
-
 Complete documentation with installation instructions for Dolo available at http://dolo.readthedocs.org/en/latest/
+
+
+Option 2: Binder (remote machine access)
+------------
+- Or run the code on the remote machine which has all the necesaary installations the the project folder `(No installation is needed)`
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ezgioz/BGM/master)
+
 
 
 Producing the graphs
