@@ -1,4 +1,4 @@
-name: Competitive Equilibrium
+name: Cesds elastic labour
 
 symbols:
 
@@ -9,7 +9,6 @@ symbols:
 
 
 definitions:
-    #mu: theta / (theta-1)
     rho: N^(mu-1)
     epsilon: mu - 1
     L: ( (po + (1-po)*(1/mu))*Z*rho*C^(-gamma) ) ^ (1/varphi)
@@ -24,8 +23,7 @@ equations:
 
 
     arbitrage:
-        - -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu-1) ) ) * (po + (1-po)*mu/mu) #equivalent to below#
-        #- -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)* (mu-1) ) 
+        - -C^(-gamma) * rho + beta * (1-delta)  * (C(+1)^(-gamma)) * ( rho(1) + C(1)/N(1)*( (epsilon(1))*po + (1-po) * (mu-1) ) ) * (po + (1-po)*mu/mu) 
         - -Welf + log(C) - (L^(1+varphi))/(1+varphi) + beta*Welf(+1)
         #- -Welf + log(C) - log(N) + beta*Welf(+1)
 
@@ -38,17 +36,18 @@ calibration:
         epsilon: mu - 1
     
       
-      
+        # Steady state solved analytically   
         #N: ( (po + (1-po)*theta/(theta-1)) * ((delta + (r+delta)*(theta-1))/ (1-delta))^varphi * ((theta-1)*(r+delta)/(1-delta))^gamma ) ^ ( (theta-1)/ (1-gamma*theta - varphi*(theta-1)) )
         #L: N* (delta + (r+delta)*(theta-1 ) ) / (1-delta)
         #C: (theta-1)*(r+delta)*(N^(theta/(theta-1)))/(1-delta)
-        
-        N: Z*(1-delta)/((1/beta - 1 + delta)/( po*epsilon + (1-po)*(mu-1) ) +delta)
-        C: rho*(Z - delta*N/(1-delta))
-        Welf: (log(C) - (L^(1+varphi))/(1+varphi))*(1/(1-beta))
         #Welf: (log(C) - log(N))*(1/(1-beta))
         
+        # Steady state for CES-DS inelastic labour case
+        N: Z*(1-delta)/((1/beta - 1 + delta)/( po*epsilon + (1-po)*(mu-1) ) +delta)
+        C: rho*(Z - delta*N/(1-delta))
         L: ( (po + (1-po)*(1/mu))*Z*rho*C^(-gamma) ) ^ (1/varphi)
+        Welf: (log(C) - (L^(1+varphi))/(1+varphi))*(1/(1-beta))
+        
         
         # parameters:
         beta: 0.99

@@ -1,4 +1,4 @@
-name: Competitive Equilibrium
+name: Ces-ds endogenous invesment inelastic labor
 
 symbols:
 
@@ -44,7 +44,12 @@ calibration:
         C: Y-I
         D: zeta*Y/(LC*Z)
         Z: 1
-        L: 1 #( (po + (1-po)*2) zeta*sigma*(r+delta)/(1-delta) )*N^2 + delta*N/(1-delta)
+        
+        # Inelastic labour
+        L: 1 
+        
+        # Elastic labour
+        #L: ( (po + (1-po)*2) zeta*sigma*(r+delta)/(1-delta) )*N^2 + delta*N/(1-delta)
 
 
         Welf: log(C)*(1/(1-beta))
@@ -54,7 +59,6 @@ calibration:
 
         # parameters:
 
-        #K: (1/beta/(1-delta)-1) * (1/xi)
         beta: 0.99
         delta: 0.025
         deltaK: 0.025
@@ -64,7 +68,10 @@ calibration:
         varphi: 0.25
         mu: theta / (theta-1)
         zeta: 0.66
-        po: 0
+        
+        #Commented out because this will be set each step 
+        #po = 1 #for planner 
+        #po = for #competitive equilibrium.
         
 
 exogenous: !Normal

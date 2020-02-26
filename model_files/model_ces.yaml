@@ -1,4 +1,4 @@
-name: Competitive Equilibrium
+name: CES
 
 symbols:
 
@@ -47,7 +47,10 @@ calibration:
         theta: 3.8
         rhoZ: 0.95
         xi: 0.5
-        po: 0
+        
+        #Commented out because this will be set each step 
+        #po = 1 #for planner 
+        #po = for #competitive equilibrium.
        
 
 exogenous: !Normal

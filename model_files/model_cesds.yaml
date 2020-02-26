@@ -1,4 +1,4 @@
-name: Competitive Equilibrium
+name: Ces-ds
 
 symbols:
 
@@ -46,6 +46,10 @@ calibration:
         gamma: 1
         theta: 3.8
         rhoZ: 0.95
+        
+        #Commented out because this will be set each step 
+        #po = 1 #for planner 
+        #po = for #competitive equilibrium.
        
 
 exogenous: !Normal

@@ -1,4 +1,4 @@
-name: Competitive Equilibrium
+name: Exponential
 
 symbols:
 
@@ -30,15 +30,19 @@ calibration:
 
         # steady_state:
 
-        Z: 1
-        
         mu: 1 + 1/alpha/N
         rho: exp( - 1/alpha/N/2 )
         epsilon: (mu-1)
         
-        N: 1 #Z*(1-delta)/((1/beta - 1 + delta)/( po*epsilon + (1-po)*(mu-1) ) +delta)
-        C: 0.5 #rho*(Z - delta*N/(1-delta))
+        
+        # Steady state can be solved analytically and put here instead. (As we did for CES models)
+        # With these values Dolo finds the steady state and solve the  model so it is OK.
+        Z: 1
+        N: 1 
+        C: 0.5 
         Welf: log(C)*(1/(1-beta))
+        
+
         
         # parameters:
         beta: 0.99
@@ -47,8 +51,10 @@ calibration:
         theta: 3.8
         rhoZ: 0.95
         alpha: 5
-        po: 0
-        
+
+        #Commented out because this will be set each step 
+        #po = 1 #for planner 
+        #po = for #competitive equilibrium.
 
 exogenous: !Normal
     Sigma: [[0.0072^2]]

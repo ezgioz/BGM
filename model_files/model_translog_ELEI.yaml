@@ -1,6 +1,6 @@
 name: Translog endogenous investment elastic labor
 # parameter po = 1 if planner po = 0 for competitive equilibrium
-# varphi = 0.25 here
+# varphi = 5 here
 
 symbols:
 
@@ -52,11 +52,11 @@ calibration:
         D: zeta*Y/(LC*Z)
         Z: 1
         
-        # We have the analytical solution for all the variables except N. For N we have the closed form solution when phi = 0. 
+        # We have the closed form solution for all the variables except N. For N we have the closed form solution when phi = 0. 
         #I tried to set the steady state value with those solutions but didnt work.(They are commented out below) 
         #Because apparently these values are far from the true steady state. 
         #Setting N to 1+1/sigma and defining the other variables as follows work. 
-        #Apparently this initial guess is closer to the true value and dolo finds the true steady state.
+        #Apparently this initial guess is closer to the true value and dolo finds the true steady state
         
         #N: (( (1/(2*sigma))*((r+deltaK)/(r+zeta*deltaK))*((1-delta)/(r+delta)) )^(1/2))*po + (( ( (r+deltaK)/(2*sigma*(r+zeta*deltaK)) )^2 + (r+deltaK)*(1-delta)/(sigma*(r+zeta*deltaK)*(r+delta)) ) ^ (1/2) - (r+deltaK)/(2*sigma*(r+zeta*deltaK)))*(1-po) 
         #L: (po+1)*zeta*sigma*(r+delta)*(N^2)/(1-delta) + delta*N/(1-delta) 
