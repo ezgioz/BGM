@@ -3,6 +3,9 @@
 *Monopoly Power and Endogenous Product Variety: Distortions and Remedies* : production of welfare graphs.
 ========================================================================================================
 
+This code is created by Pablo Winant and further developped by Ezgi Ozsogut.
+
+The code is maintained here https://github.com/ezgioz/BGM
 
 Installation
 ------------
@@ -10,6 +13,7 @@ Installation
 Required programs to produce the graphs are
 - a recent distribution of scientific Python for instance [Anaconda Python](https://store.continuum.io/cshop/anaconda/)
 - the [dolo](https://github.com/EconForge/dolo) modeling package
+- and the https://github.com/ezgioz/BGM is thre repository to be imported
 
 - Or run the code on Mybinder (link here) remote computer which has all the necesaary installations the the project folder `(No installation is needed)`
 
@@ -29,25 +33,13 @@ To view and execute it on the __remote computer__ just clicj on the`Produce Grap
 
 ##### The main notebook (Produce Graphs.ipynb)
 
-This notebook solve the various models for different parameter values and plots the associated welfare gains comparing competetitive equilibrium and planner equilibrium solutions. The models are coded using `dolo` specifications in the different `yaml` files in `model_files` folder. For the model solution code, see "BGM_solver" module. For more information on the perturbation method see [the documentation](https://dolo.readthedocs.io/en/latest/perturbations.html) or [the source code](https://github.com/EconForge/dolo/blob/master/dolo/algos/perturbation.py)
+This notebook solve various models for different parameter values and plots the associated welfare gains comparing competetitive equilibrium and planner equilibrium solutions. The models are coded using `dolo` specifications in the different `yaml` files in `model_files` folder. For the model solution code, see `BGM_solver` module. The welfare computations are based on a second order Taylor expansion of the decision-rule.
+ For more information on the perturbation method see [the documentation](https://dolo.readthedocs.io/en/latest/perturbations.html) or [the source code](https://github.com/EconForge/dolo/blob/master/dolo/algos/perturbation.py) 
 
-On this notebook run each code block by "ctrl+enter" for the following computation steps
+On this notebook run each code block by "ctrl+enter" for the following computation steps. (There is detailed information in this notebook for each step)
 
 
 1 Define various scenarios
-
-__Necesarry inputs__
-- modfile: name of the model file (ces, cesds, exponential etc.) See 'model_file' folders. Each file includes the model equations, parameters, calibrations, exogenous process. 
-
-- freeparam: name of the free parameter 
-
-- range: range of this parameter (starting value, end value, number of grid points)
-
-__Optional inputs__
-
-- fixedparam: name of the parameter (which will be different than the baseline calbiration) that you want to change and plot
-
-- value: value for this fixed parameter 
 
 2 Compute welfares calling the "BGM_solver" module. More information in the file itself, see comments at each step. This file
 - imports the model
@@ -56,17 +48,10 @@ __Optional inputs__
 - return the results 
 
 3 Export results in a table (also export to excel)
-Number of columns is equal to N which is the number of different values of the free paramater. So each line will give the results for one specific parameter value.
-Each column computes
 
-Run each code block by "ctrl+enter"
-
-This is code 
-
-The welfare computations are based on a second order Taylor expansion of the decision-rule.
 
 Output
 ------
 
-The resulting graphs are stored in the `BGM_welfare_gains.*` files.
+The resulting graphs and results are stored in the output folder. If you are running the code on the remote machine, you should save them on your local computer before leaving the remote machine. Changes you make on the code or the related ouput files won't be saved remotely. If you install python and dolo to use the BGM folder on your machine, ouput will be updated in the output folder automatically.
 <!-- #endregion -->
