@@ -10,9 +10,11 @@ def compute_case(expm):
     ----------
     expm: dict
         Description of the experiment to perform. Contains several fields:
-        - name: name of the experiment, the corresponding model file is expected to be model_*name*.yaml
-        - param: name of the parameter to change
+        - modfile: name of the experiment, the corresponding model file is expected to be model_*name*.yaml
+        - freeparam: name of the parameter to change
         - range: set of parameter values (min value, max value, N values)
+        - fixedparam: name of the fixed parameter (value different from model calibration)
+        - value: value of fixed parameter
     Returns
     -------
     df: pandas.DataFrame
@@ -20,6 +22,7 @@ def compute_case(expm):
         - parameter value
         - welfare for the planner optimum
         - welfare for the competitive equilibrium
+        - welfare gains
     '''
         
     
