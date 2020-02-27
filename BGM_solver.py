@@ -128,7 +128,7 @@ def compute_case(expm):
         # compute welfare and gains for that parameter value
         
         if dr_me_true == 1 and dr_po_true == 1:
-            #print('model', freeparam, '=', i, '--> steady state found for both models')
+            print('model', freeparam, '=', i, '--> Bengi is a looser')
             
             # Initial point at which to evaluate the welfare (common for both models!)
             eval_point = calib_po['states'].copy();
